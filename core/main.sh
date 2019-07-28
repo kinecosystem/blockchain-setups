@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+sudo git clone https://github.com/kinecosystem/blockchain-setups.git /data
 source /data/blockchain-setups/core/setup-env-var.sh
-sudo /data/blockchain-setups/core/python3 setup-core.py
-sudo /data/blockchain-setups/core/setup-containers.sh
+sudo python3 /data/blockchain-setups/core/setup-core.py
+sudo bash /data/blockchain-setups/core/setup-containers.sh
