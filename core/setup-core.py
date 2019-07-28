@@ -65,7 +65,7 @@ if __name__ == '__main__':
     ''' Setup core config file '''
     # Read environment variables
     validator_state = os.environ.get('validator', 'false')
-    all_nodes = ast.literal_eval(os.environ.get(['all_nodes'],
+    all_nodes = ast.literal_eval(os.environ.get('all_nodes',
                                                 "{'node1': 'GKYGDERGG', 'node2': 'SGHSRTHHR', 'node3': 'SDGHBSDGB', 'node4': 'SGDHSGDGH'}"))
     db_name = os.environ.get("db_name", "my_db_name")
     db_user = os.environ.get("db_user", "this-is-user")
