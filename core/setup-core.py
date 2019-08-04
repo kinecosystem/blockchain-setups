@@ -1,6 +1,4 @@
-# from deploy.utils.coreTemplate import build_cfg
 import os
-import ast
 
 
 def build_cfg(db_name, db_user, db_password, network_passphrase, preferred_peers, node_seed, node_name, is_validator,
@@ -65,8 +63,10 @@ if __name__ == '__main__':
     ''' Setup core config file '''
     # Read environment variables
     validator_state = os.environ.get('validator', 'false')
-    all_nodes = ast.literal_eval(os.environ.get('all_nodes',
-                                                "{'node1': 'GKYGDERGG', 'node2': 'SGHSRTHHR', 'node3': 'SDGHBSDGB', 'node4': 'SGDHSGDGH'}"))
+    all_nodes = {}
+    nodes = os.environ.get('all_nodes', "node1 dghdghngf,node2 dhndghnghn")
+    for node in nodes.split(','):
+        all_nodes[node.split(' ')[0]] = node.split(' ')[1]
     db_name = os.environ.get("db_name", "my_db_name")
     db_user = os.environ.get("db_user", "this-is-user")
     db_password = os.environ.get("db_password", 'nice-password')
