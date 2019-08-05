@@ -61,6 +61,7 @@ CFG_FILE_LOCATION = "/data/stellar-core/stellar-core.cfg"
 
 if __name__ == '__main__':
     ''' Setup core config file '''
+    print("start creating CFG file")
     # Read environment variables
     validator_state = os.environ.get('validator', 'false')
     all_nodes = {}
@@ -88,3 +89,5 @@ if __name__ == '__main__':
                          validator_state, nodes_pairs, validator_nodes)
     with open(CFG_FILE_LOCATION, 'w') as f:
         f.write(cfg_data)
+    print("done creating CFG file")
+
