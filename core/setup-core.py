@@ -25,7 +25,7 @@ WHITELIST = "GCPGMBNS42RQODVI7JCIRZDOO2PKS3BDNHEL45YMB7PLGJP65FS7U4UV"
 
 LOG_FILE_PATH = ""
 
-COMMANDS = ["ll?level=warn"]
+COMMANDS = ["ll?level=debug"]
 
 DATABASE = "postgresql://dbname={db_name} host=/var/run/postgresql user={db_user} password={db_password}"
 
