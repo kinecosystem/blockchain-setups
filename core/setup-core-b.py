@@ -57,7 +57,7 @@ mkdir = "mkdir -p /data/core-history/history/vs/{0}"
 '''
 
 
-CFG_FILE_LOCATION = "/usr/local/stellar-core/stellar-core.cfg"
+CFG_FILE_LOCATION = "/usr/local/stellar-core.cfg"
 
 if __name__ == '__main__':
     ''' Setup core config file '''

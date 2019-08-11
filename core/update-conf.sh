@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 sudo docker-compose -f /data/docker-compose.yml down
-sudo cp /usr/local/stellar-core/stellar-core.cfg /data/stellar-core/stellar-core.cfg
+sudo cp /usr/local/stellar-core.cfg /data/stellar-core/stellar-core.cfg
 sudo cp /data/code/core/postgresql.cfg.tmpl /data/postgresql/data/postgresql.cfg
 sudo chown -R postgres:postgres /data/postgresql/data/postgresql.cfg
 sudo docker-compose -f /data/docker-compose.yml up -d stellar-core-db
