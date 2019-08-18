@@ -2,7 +2,7 @@ version: "3"
 services:
 
   horizon-db:
-    image: "kinecosystem/postgres-horizon:${HORIZON_POSTGRES_VER}"
+    image: postgres:${POSTGRES_VER}
     environment:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
@@ -22,7 +22,7 @@ services:
 
   horizon:
     depends_on: [horizon-db]
-    image: kinecosystem/horizon:kinecosystem-v2.0.0-stellar-v0.16.1
+    image: "kinecosystem/horizon:${HORIZON_VER}"
     environment:
       DATABASE_URL: "dbname=horizon user=stellar host=/var/run/postgresql password=G17WAqXN7nH0xXWs"
       HORIZON_DB_MAX_OPEN_CONNECTIONS: "200"
@@ -96,4 +96,4 @@ services:
       driver: json-file
       options:
         max-size: 100m
-        max-file: "3"x
+        max-file: "3"
