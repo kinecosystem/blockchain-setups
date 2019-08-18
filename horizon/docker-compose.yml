@@ -23,7 +23,7 @@ services:
 
   horizon:
     depends_on: [horizon-db]
-    image: kinecosystem/horizon:kinecosystem-v2.0.0-stellar-v0.16.1
+    image: "kinecosystem/horizon:${HORIZON_VER}"
     environment:
       DATABASE_URL: "dbname=horizon user=stellar host=/var/run/postgresql password=G17WAqXN7nH0xXWs"
       HORIZON_DB_MAX_OPEN_CONNECTIONS: "200"
