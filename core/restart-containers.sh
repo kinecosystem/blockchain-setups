@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd /data
 sudo docker-compose -f /data/docker-compose.yml down
+sudo bash /data/code/core/genseed.sh
 sudo cp /usr/local/stellar-core.cfg /data/stellar-core/stellar-core.cfg
 sudo docker-compose -f /data/docker-compose.yml up -d stellar-core-db
 sleep 14
