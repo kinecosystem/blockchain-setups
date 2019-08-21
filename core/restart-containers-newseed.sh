@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 cd /data
 sudo docker-compose -f /data/docker-compose.yml down
-sudo bash /data/code/core/genseed.sh
-SEED=$(docker run -it kinecosystem/stellar-core stellar-core --genseed | sed -e 's/^Secret seed: //' | sed -n 1p | tr '\n' ' ' | tr '\r' ' ')
+echo "Generating new seed"
+SEED=$(sudo docker run -it kinecosystem/stellar-core stellar-core --genseed | sed -e 's/^Secret seed: //' | sed -n 1p | tr '\n' ' ' | tr '\r' ' ')
 NAME=$(cat /data/.env | grep NODE_NAME | sed -e 's/^NODE_NAME=//')
 NODE_SEED="\"$SEED$NAME\""
 cp /data/stellar-core/stellar-core.cfg /usr/local/stellar-core.cfg
