@@ -1,9 +1,8 @@
-# Telegraf configuration for stellar core:
 # this clients run natively on the host and collects the system metrics
 
 # Global tags can be specified here in key="value" format.
 [tags]
-  node_name = "stellar-core-kin-fed-e50b-$NODE_NUM"
+  node_name = "stellar-core-kin-fed-e50b-$NODE_NAME"
   stellar_network = "fed" #TODO take this from config
   app_name = "stellar-core"
 
@@ -34,13 +33,11 @@
   flush_jitter = "0s"
 
   # Run telegraf in debug mode
-  debug = true
+  debug = false
   # Run telegraf in quiet mode
   quiet = false
   # Override default hostname, if empty use os.Hostname()
   hostname = ""
-
-  logfile = "/var/log/telegraf/telegraf.log"
 
 
 ###############################################################################
@@ -67,4 +64,3 @@
   pattern="postgres"
 [[inputs.procstat]]
   pattern="stellar-core"
-
