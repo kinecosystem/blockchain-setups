@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd /data
 sudo rm -rf /data/postgresql
 sudo rm -rf /data/horizon-volumes
 sudo docker-compose -f /data/docker-compose.yml down
