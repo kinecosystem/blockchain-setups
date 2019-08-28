@@ -3,7 +3,7 @@ services:
 
   stellar-core-db:
     image: postgres:10-alpine
-    #command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     container_name: stellar-core-db
     restart: always
     environment:
