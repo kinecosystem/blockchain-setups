@@ -9,6 +9,8 @@ sudo cp /data/stellar-core/stellar-core.cfg /usr/local/stellar-core.cfg
 sudo sed -i '/NODE_SEED/d' /usr/local/stellar-core.cfg
 sudo sed -i "/NETWORK_PASSPHRASE/a NODE_SEED=$NODE_SEED" /usr/local/stellar-core.cfg
 sudo cp /usr/local/stellar-core.cfg /data/stellar-core/stellar-core.cfg
+sudo cp /data/code/core/telegraf.conf /etc/telegraf/telegraf.conf
+sudo service telegraf restart
 sudo docker-compose -f /data/docker-compose.yml up -d stellar-core-db
 sleep 14
 sleep 2
