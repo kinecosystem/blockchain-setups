@@ -1,0 +1,74 @@
+version: "3"
+services:
+
+  stellar-core:
+    image: kinecosystem/stellar-core:kinecosystem-v2.1.0-stellar-v9.2.0
+    #image: kinecosystem/stellar-core:nomination-counter
+    entrypoint: ''
+    command: bash -c '/usr/local/bin/stellar-core'
+    #command: bash -c 'tail -f /dev/null'
+    container_name: stellar_core
+    ports:
+      - 11625:11625
+      - 11626:11626
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
+      - ./stellar-core:/opt/stellar-core
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
+    depends_on:
+      - stellar-core-db
+    links:
+      - "stellar-core-db:stellar-core-nw"
+  stellar-core-telegraf:
+    image: kinecosystem/stellar-core-telegraf:v1.0.3
+    environment:
+      REGION_NAME: ${REGION_NAME}
+      RDS_DB_INSTANCE_IDENTIFIER: no-rds
+      HISTORY_WELL_KNOWN_FILE_URL: no-history-bucket
+      NODE_NAME: ${NODE_NAME}
+      NETWORK_NAME: ${NETWORK_NAME}
+      CORE_DB_URL: ${CORE_DB_URL}
+      CORE_TYPE: "observer"
+    container_name: stellar_core_telegraf
+    links:
+    - stellar-core:stellar-core
+    - stellar-core-metrics-exporter:stellar-core-metrics-exporter
+    - stellar-core-db:stellar-core-db
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
+  stellar-core-metrics-exporter:
+    image: kinecosystem/stellar-core-metrics-exporter:v1.0.1
+    container_name: stellar_core_metrics_exporter
+    links:
+    - stellar-core:stellar-core
+    restart: always
+    ports:
+    - 9473:9473
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+  filebeat:
+    image: kinecosystem/filebeat-for-docker-logs:v1.0.0
+    container_name: filebeat
+    restart: always
+    environment:
+      NODE_NAME: ${FB_NAME}
+      NETWORK_NAME: fed
+      LOGSTASH_HOST: "184.73.97.253:5044"
+    volumes:
+    - /var/lib/docker/containers:/var/lib/docker/containers:rw
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
