@@ -3,6 +3,7 @@ cd /data
 sudo rm -rf /data/postgresql
 sudo rm -rf /data/horizon-volumes
 sudo docker-compose -f /data/docker-compose.yml down
+sudo docker-compose pull
 sudo docker-compose -f /data/docker-compose.yml up -d horizon-db
 sleep 14
 sudo docker-compose -f /data/docker-compose.yml run --rm horizon db init
