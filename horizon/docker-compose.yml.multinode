@@ -1,0 +1,101 @@
+version: "3"
+
+services:
+  horizon:
+    depends_on: [horizon-db]
+    image: kinecosystem/horizon:kinecosystem-v2.0.0-stellar-v0.16.1
+    container_name: horizon
+    network_mode: host  # listens on port 8000
+    volumes:
+            - /data/horizon-volumes/volumes/horizon:/opt/horizon
+            - /var/run/postgresql:/var/run/postgresql
+            - /data/config/postgresql.conf:/etc/postgresql/postgresql.conf
+    environment:
+      DATABASE_URL: "dbname=horizon user=stellar host=/var/run/postgresql password=G17WAqXN7nH0xXWs"
+      HORIZON_DB_MAX_OPEN_CONNECTIONS: "24"
+      STELLAR_CORE_DATABASE_URL: "postgres://stellar:G17WAqXN7nH0xXWs@ip-watcher-test-1.test.kin/core?sslmode=disable"
+      STELLAR_CORE_URL: "http://ip-watcher-test-1.test.kin:11626"
+      LOG_LEVEL: "debug"
+      INGEST: "true"
+      PER_HOUR_RATE_LIMIT: "10000000"
+      HISTORY_RETENTION_COUNT: "90000"
+      NETWORK_PASSPHRASE: "Kin test ; Jul 2019"
+      FRIENDBOT_URL: ''
+      CURSOR_NAME: "HORIZON1"
+
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
+  horizon-db:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_USER: stellar
+      POSTGRES_PASSWORD: "G17WAqXN7nH0xXWs"
+      POSTGRES_DB: horizon
+    ports:
+      - 5432:5432
+    volumes:
+      - /data/postgresql/data:/var/lib/postgresql/data
+      - /var/run/postgresql:/var/run/postgresql
+  horizon-health-check:
+    command: pipenv run gunicorn -b 0.0.0.0:8001 main:APP
+
+    image: kinecosystem/horizon-health-check:v1.0.1
+    container_name: horizon-health-check
+
+    network_mode: host
+
+    environment:
+      BUILD_VERSION: a25eb1c
+      REQUEST_TIMEOUT: 2
+      CORE_INFO_URL: http://ip-watcher-test-1.test.kin:11626/info
+      HORIZON_INFO_URL: http://localhost:80/
+
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
+  horizon-telegraf:
+    image: kinecosystem/horizon-telegraf-test-env:v1.0.1
+    container_name: horizon-telegraf
+    ports:
+    - 9274:9274
+    environment:
+      NODE_NAME: "kin-fed"
+      NETWORK_NAME: fed
+      TARGET_URL: "http://ip-watcher-test-1.test.kin:11626/info"
+      REGION_NAME: "us-east-1"
+      RDS_DB_INSTANCE_IDENTIFIER: "horizon-kin-test"
+    network_mode: host
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
+  horizon-nginx-proxy:
+    image: kinecosystem/horizon-nginx-statsd:v1.0.7
+    container_name: horizon-nginx-proxy
+
+    network_mode: host
+
+    environment:
+      STATSD_SAMPLE_RATE_PERCENT: 100
+      NODE_NAME: kin-fed
+      PROXY_LISTEN_PORT: 80
+      PROXY_READ_TIMEOUT: 900
+      PROXY_PASS_URL: http://localhost:8000
+      HOST: "horizon.kinfederation.com"
+
+
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: "3"
